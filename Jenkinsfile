@@ -1,21 +1,28 @@
-pipeline{
+pipeline {
     agent any
-    stages{
-        stage("checkout"){
-            steps{
-                checkout scm
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/dineshdadisetty/node-dockerized-project.git', branch: 'main'
             }
         }
-
-        stage("Test"){
-            steps{
+        
+        stage('Install Dependencies') {
+            steps {
+                // Ensure Node.js and npm are available, either through a Docker image or installed on the agent
                 sh 'npm install'
+            }
+        }
+        
+        stage('Test') {
+            steps {
                 sh 'npm test'
             }
         }
-
-        stage("Build"){
-            steps{
+        
+        stage('Build') {
+            steps {
                 sh 'npm run build'
             }
         }
