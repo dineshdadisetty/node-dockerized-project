@@ -1,7 +1,8 @@
 pipeline {
     agent {
         docker {
-            image 'node:14' // Use the appropriate Node.js version for your project
+            image 'docker:19.03' // or any appropriate Docker image version
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
 
@@ -14,19 +15,20 @@ pipeline {
         
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                sh 'docker pull node:14'
+                sh 'docker run --rm -v $PWD:/workspace -w /workspace node:14 npm install'
             }
         }
         
         stage('Test') {
             steps {
-                sh 'npm test'
+                sh 'docker run --rm -v $PWD:/workspace -w /workspace node:14 npm test'
             }
         }
         
         stage('Build') {
             steps {
-                sh 'npm run build'
+                sh 'docker run --rm -v $PWD:/workspace -w /workspace node:14 npm run build'
             }
         }
     }
