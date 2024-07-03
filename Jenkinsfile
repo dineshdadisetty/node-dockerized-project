@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'node:14' // Use the appropriate Node.js version for your project
+        }
+    }
 
     stages {
         stage('Checkout') {
@@ -10,7 +14,6 @@ pipeline {
         
         stage('Install Dependencies') {
             steps {
-                // Ensure Node.js and npm are available, either through a Docker image or installed on the agent
                 sh 'npm install'
             }
         }
